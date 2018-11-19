@@ -46,7 +46,7 @@ func (c *Client) FetchTotalContributionCount() (int, error) {
 }
 
 // FetchTodayContributionCount func
-func (c *Client) FetchTodayContributionCount() (int64, error) {
+func (c *Client) FetchTodayContributionCount() (int, error) {
 	contributions, err := c.extractContributions()
 	if err != nil {
 		return 0, err
@@ -57,14 +57,14 @@ func (c *Client) FetchTodayContributionCount() (int64, error) {
 }
 
 // FetchContributions func
-func (c *Client) FetchContributions() (map[string]int64, error) {
+func (c *Client) FetchContributions() (map[string]int, error) {
 	return c.extractContributions()
 }
 
-func (c *Client) extractContributions() (map[string]int64, error) {
+func (c *Client) extractContributions() (map[string]int, error) {
 	e, err := domain.NewExtractor(c.username)
 	if err != nil {
-		return map[string]int64{}, err
+		return map[string]int{}, err
 	}
 
 	return e.ExtractContributions()

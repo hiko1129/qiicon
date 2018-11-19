@@ -14,10 +14,12 @@ func TestNew(t *testing.T) {
 }
 
 func TestFetchTotalContributionCount(t *testing.T) {
+	// real
 	c, _ := qiicon.New("hiko1129")
 	_, err := c.FetchTotalContributionCount()
 	assert.NoError(t, err)
 
+	// mock
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 	httpmock.RegisterResponder("GET", "https://qiita.com/api/internal/hovercard_users/hiko1129", httpmock.NewStringResponder(200, `{"contribution": 100}`))
@@ -35,6 +37,7 @@ func TestFetchTotalContributionCount(t *testing.T) {
 }
 
 func TestFetchTodayContributionCount(t *testing.T) {
+	// real
 	c, _ := qiicon.New("hiko1129")
 
 	_, err := c.FetchTodayContributionCount()
@@ -42,6 +45,7 @@ func TestFetchTodayContributionCount(t *testing.T) {
 }
 
 func TestFetchContributions(t *testing.T) {
+	// real
 	c, _ := qiicon.New("hiko1129")
 
 	contributions, err := c.FetchContributions()

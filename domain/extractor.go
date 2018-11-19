@@ -31,9 +31,9 @@ func NewExtractor(username string) (*Extractor, error) {
 }
 
 // ExtractContributions func
-func (e *Extractor) ExtractContributions() (map[string]int64, error) {
+func (e *Extractor) ExtractContributions() (map[string]int, error) {
 	contributionURL := baseEndpoint + e.username + "/" + "contributions"
-	con := map[string]int64{}
+	con := map[string]int{}
 
 	res, err := http.Get(contributionURL)
 	if err != nil {
@@ -69,7 +69,7 @@ func (e *Extractor) ExtractContributions() (map[string]int64, error) {
 			return con, err
 		}
 
-		con[date.String()] = c
+		con[date.String()] = int(c)
 	}
 
 	return con, nil

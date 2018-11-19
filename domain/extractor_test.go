@@ -14,6 +14,7 @@ func TestNewExtractor(t *testing.T) {
 }
 
 func TestExtractContributions(t *testing.T) {
+	// mock
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
@@ -23,6 +24,6 @@ func TestExtractContributions(t *testing.T) {
 
 	e, err := domain.NewExtractor("hiko1129")
 	contributions, err := e.ExtractContributions()
-	assert.Equal(t, int64(0), contributions["2018-11-08"])
+	assert.Equal(t, 0, contributions["2018-11-08"])
 	assert.NoError(t, err)
 }
