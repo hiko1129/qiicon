@@ -44,11 +44,11 @@ func TestFetchTodayContributionCount(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestFetchContributions(t *testing.T) {
-	// real
-	c, _ := qiicon.New("hiko1129")
+// func TestFetchContributions(t *testing.T) {
+// 	// real
+// 	c, _ := qiicon.New("hiko1129")
 
-	contributions, err := c.FetchContributions()
-	assert.NotEmpty(t, contributions)
-	assert.NoError(t, err)
-}
+// 	contributions, err := c.FetchContributions()
+// 	assert.NotEmpty(t, contributions)
+// 	assert.NoError(t, err)
+// }
