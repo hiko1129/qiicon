@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.11
+      - image: circleci/golang:1.10
 
     working_directory: /go/src/github.com/hiko1129/qiicon
 
@@ -11,7 +11,10 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            go get -u golang.org/x/lint/golint
+            go get -u golang.org/x/lint/golint 
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            export PATH=$PATH:$GOPATH/bin
+            dep ensure
 
       - run:
           name: lint
