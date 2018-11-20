@@ -1,19 +1,28 @@
-package domain_test
+package infrastructure_test
 
 import (
 	"testing"
 
-	"github.com/hiko1129/qiicon/domain"
+	"github.com/hiko1129/qiicon/infrastructure"
+	"github.com/hiko1129/qiicon/qiicon"
 	"github.com/stretchr/testify/assert"
 	httpmock "gopkg.in/jarcoal/httpmock.v1"
 )
 
-func TestNewExtractor(t *testing.T) {
-	_, err := domain.NewExtractor("hiko1129")
+func TestNew(t *testing.T) {
+	_, err := qiicon.New("hiko1129")
 	assert.NoError(t, err)
 }
 
-func TestExtractContributions(t *testing.T) {
+func TestFetchTotalContributions(t *testing.T) {
+	// real
+	c, err := infrastructure.NewContirubutionClient()
+	assert.NoError(t, err)
+
+	contributions, err := c.FetchContributions("hiko1129")
+	assert.NotEmpty(t, contributions)
+	assert.NoError(t, err)
+
 	// mock
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -22,8 +31,31 @@ func TestExtractContributions(t *testing.T) {
 
 	httpmock.RegisterResponder("GET", "https://qiita.com/hiko1129/contributions", httpmock.NewStringResponder(200, dom))
 
-	e, err := domain.NewExtractor("hiko1129")
-	contributions, err := e.ExtractContributions()
+	c, err = infrastructure.NewContirubutionClient()
+	assert.NoError(t, err)
+
+	contributions, err = c.FetchContributions("hiko1129")
 	assert.Equal(t, 0, contributions["2018-11-08"])
+	assert.NoError(t, err)
+}
+
+func TestFetchTotalContributionCount(t *testing.T) {
+	// real
+	c, err := infrastructure.NewContirubutionClient()
+	assert.NoError(t, err)
+
+	_, err = c.FetchTotalContribution("hiko1129")
+	assert.NoError(t, err)
+
+	// mock
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	httpmock.RegisterResponder("GET", "https://qiita.com/api/internal/hovercard_users/hiko1129", httpmock.NewStringResponder(200, `{"contribution": 100}`))
+
+	c, err = infrastructure.NewContirubutionClient()
+	assert.NoError(t, err)
+
+	user, err := c.FetchTotalContribution("hiko1129")
+	assert.Equal(t, 100, user.Contribution)
 	assert.NoError(t, err)
 }
