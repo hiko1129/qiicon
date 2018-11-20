@@ -1,4 +1,4 @@
-package domain
+package infrastructure
 
 import (
 	"encoding/json"
@@ -6,17 +6,19 @@ import (
 	"net/http"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/hiko1129/qiicon/domain/object"
 )
 
 const (
-	baseEndpoint = "https://qiita.com/"
+	baseEndpoint              = "https://qiita.com/"
+	hoverCardUsersAPIEndpoint = "https://qiita.com/api/internal/hovercard_users/"
 )
 
-// Extractor struct
-type Extractor struct {
-	username string
+// ContirubutionClient struct
+type ContirubutionClient struct {
 }
 
+// userActivityChart struct
 type userActivityChart struct {
 	Data data `json:"data"`
 }
@@ -25,14 +27,14 @@ type data struct {
 	Columns [][]json.Number `json:"columns"`
 }
 
-// NewExtractor func
-func NewExtractor(username string) (*Extractor, error) {
-	return &Extractor{username}, nil
+// NewContirubutionClient func
+func NewContirubutionClient() (*ContirubutionClient, error) {
+	return &ContirubutionClient{}, nil
 }
 
-// ExtractContributions func
-func (e *Extractor) ExtractContributions() (map[string]int, error) {
-	contributionURL := baseEndpoint + e.username + "/" + "contributions"
+// FetchContributions func
+func (c *ContirubutionClient) FetchContributions(username string) (map[string]int, error) {
+	contributionURL := baseEndpoint + username + "/" + "contributions"
 	con := map[string]int{}
 
 	res, err := http.Get(contributionURL)
@@ -73,4 +75,22 @@ func (e *Extractor) ExtractContributions() (map[string]int, error) {
 	}
 
 	return con, nil
+}
+
+// FetchTotalContribution func
+func (c *ContirubutionClient) FetchTotalContribution(username string) (*object.User, error) {
+	res, err := http.Get(hoverCardUsersAPIEndpoint + username)
+	var r object.User
+	if err != nil {
+		return &r, err
+	}
+	defer res.Body.Close()
+
+	decoder := json.NewDecoder(res.Body)
+	err = decoder.Decode(&r)
+	if err != nil {
+		return &r, err
+	}
+
+	return &r, nil
 }
