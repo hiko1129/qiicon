@@ -1,4 +1,4 @@
-package infrastructure
+package gateway
 
 import (
 	"encoding/json"

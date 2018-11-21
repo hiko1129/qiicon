@@ -1,9 +1,9 @@
-package infrastructure_test
+package gateway_test
 
 import (
 	"testing"
 
-	"github.com/hiko1129/qiicon/infrastructure"
+	"github.com/hiko1129/qiicon/adapter/gateway"
 	"github.com/hiko1129/qiicon/qiicon"
 	"github.com/stretchr/testify/assert"
 	httpmock "gopkg.in/jarcoal/httpmock.v1"
@@ -16,7 +16,7 @@ func TestNew(t *testing.T) {
 
 func TestFetchTotalContributions(t *testing.T) {
 	// real
-	c, err := infrastructure.NewContirubutionClient()
+	c, err := gateway.NewContirubutionClient()
 	assert.NoError(t, err)
 
 	contributions, err := c.FetchContributions("hiko1129")
@@ -31,7 +31,7 @@ func TestFetchTotalContributions(t *testing.T) {
 
 	httpmock.RegisterResponder("GET", "https://qiita.com/hiko1129/contributions", httpmock.NewStringResponder(200, dom))
 
-	c, err = infrastructure.NewContirubutionClient()
+	c, err = gateway.NewContirubutionClient()
 	assert.NoError(t, err)
 
 	contributions, err = c.FetchContributions("hiko1129")
@@ -41,7 +41,7 @@ func TestFetchTotalContributions(t *testing.T) {
 
 func TestFetchTotalContributionCount(t *testing.T) {
 	// real
-	c, err := infrastructure.NewContirubutionClient()
+	c, err := gateway.NewContirubutionClient()
 	assert.NoError(t, err)
 
 	_, err = c.FetchTotalContribution("hiko1129")
@@ -52,7 +52,7 @@ func TestFetchTotalContributionCount(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	httpmock.RegisterResponder("GET", "https://qiita.com/api/internal/hovercard_users/hiko1129", httpmock.NewStringResponder(200, `{"contribution": 100}`))
 
-	c, err = infrastructure.NewContirubutionClient()
+	c, err = gateway.NewContirubutionClient()
 	assert.NoError(t, err)
 
 	user, err := c.FetchTotalContribution("hiko1129")

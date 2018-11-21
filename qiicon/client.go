@@ -1,7 +1,7 @@
 package qiicon
 
 import (
-	"github.com/hiko1129/qiicon/infrastructure"
+	"github.com/hiko1129/qiicon/adapter/gateway"
 	"github.com/hiko1129/qiicon/usecase"
 )
 
@@ -18,7 +18,7 @@ func New(username string) (*Client, error) {
 // FetchTotalContributionCount func
 func (c *Client) FetchTotalContributionCount() (int, error) {
 	req := &usecase.FetchTotalContributionCountRequest{Username: c.username}
-	client, err := infrastructure.NewContirubutionClient()
+	client, err := gateway.NewContirubutionClient()
 	if err != nil {
 		return 0, err
 	}
@@ -37,7 +37,7 @@ func (c *Client) FetchTotalContributionCount() (int, error) {
 // FetchTodayContributionCount func
 func (c *Client) FetchTodayContributionCount() (int, error) {
 	req := &usecase.FetchTodayContributionCountRequest{Username: c.username}
-	client, err := infrastructure.NewContirubutionClient()
+	client, err := gateway.NewContirubutionClient()
 	if err != nil {
 		return 0, err
 	}
@@ -57,7 +57,7 @@ func (c *Client) FetchTodayContributionCount() (int, error) {
 func (c *Client) FetchContributions() (map[string]int, error) {
 	result := map[string]int{}
 	req := &usecase.FetchContributionsRequest{Username: c.username}
-	client, err := infrastructure.NewContirubutionClient()
+	client, err := gateway.NewContirubutionClient()
 	if err != nil {
 		return result, err
 	}
