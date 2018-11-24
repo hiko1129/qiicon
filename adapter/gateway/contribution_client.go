@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -53,7 +54,10 @@ func (c *ContirubutionClient) FetchContributions(username string) (map[string]in
 		return con, err
 	}
 
-	jsonStr, _ := doc.Find(".userActivityChart").Attr("data-props")
+	jsonStr, exists := doc.Find(".userActivityChart").Attr("data-props")
+	if !exists {
+		return con, errors.New("data-props attribute does not exist")
+	}
 	jsonBytes := ([]byte)(jsonStr)
 
 	var u userActivityChart
