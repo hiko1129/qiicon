@@ -2,7 +2,7 @@
 
 ## Installation
 
-`$ go get github.com/hiko1129/qiicon`
+`$ go get github.com/hiko1129/qiicon/qiicon`
 
 ## Examples
 
